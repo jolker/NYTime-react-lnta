@@ -8,11 +8,11 @@ class App extends Component {
       <div>
         <div id="fh5co-offcanvass">
       		<a href="#" className="fh5co-offcanvass-close js-fh5co-offcanvass-close">Menu <i className="icon-cross"></i> </a>
-      		<h1 className="fh5co-logo"><a className="navbar-brand" href="index.html">NYTIMES</a></h1>
+      		<h1 className="fh5co-logo"><a className="navbar-brand" href="/">NYTIMES</a></h1>
       		<ul>
       			<li className="active"><a href="/">Home</a></li>
-      			<li><a href="#">About</a></li>
-      			<li><a href="#">Contact</a></li>
+      			<li><a href="/">About</a></li>
+      			<li><a href="/">Contact</a></li>
       		</ul>
       		<h3 className="fh5co-lead">Connect with us</h3>
       		<p className="fh5co-social-icons">

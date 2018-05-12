@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
 import './App.css';
+import { Image } from 'react-bootstrap';
 
 class NYTimeItem extends Component {
   render() {
-    const {item, id} = this.props;
-    console.log('item', item.multimedia.length);
+    const {item} = this.props;
     let url_image = "images/no_pic_image.png"
     if (item.multimedia.length > 0) {
       url_image = `https://static01.nyt.com/${item.multimedia[0].url}`
     }
     return (
-      <div className="item">
+      <div className="item col-xs-6 col-md-3">
         <div className="animate-box">
-	        <a href={`${url_image}`} className="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?">
-            <img src={`${url_image}`} alt=""/>
+	        <a href={`${url_image}`} className="image-popup fh5co-board-img" title={`${item.snippet} - ${item.source} - ${item.pub_date} `}>
+            <Image src={`${url_image}`} responsive />;
+            <div className="fh5co-desc">
+              <h4>{item.snippet}</h4>
+              <div className="text-right"><em>{item.pub_date}</em></div>
+              <div className="text-right"><em>{item.source}</em></div>
+            </div>
           </a>
         </div>
-        <div className="fh5co-desc">
-          <h3>{item.snippet}</h3>
-          <h4 className="text-right"><em>{item.pub_date}</em></h4>
-          <h4 className="text-right"><em>{item.source}</em></h4>
-        </div>
+
       </div>
     )
   }
@@ -38,16 +39,12 @@ class NYTimeList extends Component {
   }
 
   componentWillMount() {
-    console.log('this.state', this.state);
     const BASE_URL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?';
     const FETCH_URL = `${BASE_URL}api-key=8acc38aab8b240869e39017bc4cda88e&q=singapore&page=0`;
-    console.log('FETCH_URL', FETCH_URL);
     fetch(FETCH_URL)
     .then(response => response.json())
     .then(json => {
-      console.log('json', json);
       this.setState({species: json.response.docs, loading: true, fetched: true});
-      console.log('this.state', this.state);
     });
   }
 
@@ -55,11 +52,8 @@ class NYTimeList extends Component {
     const {fetched, loading, species} = this.state;
     let content;
     if (fetched) {
-      content = <div id="fh5co-board" data-columns>{species.map((item, index) =>< NYTimeItem key = {
+      content = <div id="fh5co-board" className="row" data-columns>{species.map((item) =>< NYTimeItem key = {
           item._id
-        }
-        id = {
-          index + 1
         }
         item = {
           item
@@ -70,9 +64,7 @@ class NYTimeList extends Component {
     return(
       <div id="fh5co-main">
     		<div className="container">
-    			<div className="row">
-            {content}
-          </div>
+    			{content}
         </div>
       </div>
     )
