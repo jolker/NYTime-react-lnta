@@ -1,41 +1,78 @@
 import React, { Component } from 'react';
 import './App.css';
 
+class NYTimeItem extends Component {
+  render() {
+    const {item, id} = this.props;
+    return (
+      <div className="item">
+        <div className="animate-box">
+	        <a href={`https://static01.nyt.com/${item.multimedia[0].url}`} className="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?">
+            <img src="images/img_1.jpg" alt="Free HTML5 Bootstrap template"/>
+          </a>
+        </div>
+        <div className="fh5co-desc">
+          <h3>{item.snippet}</h3>
+          <h4 className="text-right"><em>{item.pub_date}</em></h4>
+          <h4 className="text-right"><em>{item.source}</em></h4>
+        </div>
+      </div>
+    )
+  }
+}
+
 class NYTimeList extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      species: [],
+      fetched: false,
+      loading: false
+    };
+  }
+
+  componentWillMount() {
+    console.log('this.state', this.state);
+    const BASE_URL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?';
+    const FETCH_URL = `${BASE_URL}api-key=8acc38aab8b240869e39017bc4cda88e&q=singapore&page=0`;
+    console.log('FETCH_URL', FETCH_URL);
+    fetch(FETCH_URL)
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      this.setState({species: json.response.docs, loading: true, fetched: true});
+      console.log('this.state', this.state);
+    });
+  }
+
   render() {
+    const {fetched, loading, species} = this.state;
+    let content;
+    if (fetched) {
+      content = <div id="fh5co-board" data-columns>{species.map((item, index) =>< NYTimeItem key = {
+          item._id
+        }
+        id = {
+          index + 1
+        }
+        item = {
+          item
+        } />)}</div>;
+    } else if (loading && !fetched) {
+      content = <p>Loading ...</p>;
+    }
     return(
       <div id="fh5co-main">
     		<div className="container">
     			<div className="row">
-            <div id="fh5co-board" data-columns>
-            	<div className="item">
-            		<div className="animate-box">
-    	        		<a href="images/img_1.jpg" className="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?">
-                  <img src="https://static01.nyt.com/images/2017/11/06/world/06cook5-inyt/06cook5-inyt-articleLarge.jpg" alt="Free HTML5 Bootstrap template"/></a>
-            		</div>
-            		<div className="fh5co-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?</div>
-            	</div>
-              <div className="item">
-            		<div className="animate-box">
-    	        		<a href="images/img_1.jpg" className="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?">
-                  <img src="https://static01.nyt.com/images/2017/11/06/world/06cook5-inyt/06cook5-inyt-articleLarge.jpg" alt="Free HTML5 Bootstrap template"/></a>
-            		</div>
-            		<div className="fh5co-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?</div>
-            	</div>
-              <div className="item">
-            		<div className="animate-box">
-    	        		<a href="images/img_2.jpg" className="image-popup fh5co-board-img">
-                  <img src="images/img_2.jpg" alt="Free HTML5 Bootstrap template"/></a>
-    	        		<div className="fh5co-desc">Veniam voluptatum voluptas tempora debitis harum totam vitae hic quos.</div>
-            		</div>
-            	</div>
-            </div>
+            {content}
           </div>
         </div>
       </div>
     )
   }
+
 }
 
 export default NYTimeList;
