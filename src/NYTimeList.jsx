@@ -4,11 +4,16 @@ import './App.css';
 class NYTimeItem extends Component {
   render() {
     const {item, id} = this.props;
+    console.log('item', item.multimedia.length);
+    let url_image = "images/no_pic_image.png"
+    if (item.multimedia.length > 0) {
+      url_image = `https://static01.nyt.com/${item.multimedia[0].url}`
+    }
     return (
       <div className="item">
         <div className="animate-box">
-	        <a href={`https://static01.nyt.com/${item.multimedia[0].url}`} className="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?">
-            <img src="images/img_1.jpg" alt="Free HTML5 Bootstrap template"/>
+	        <a href={`${url_image}`} className="image-popup fh5co-board-img" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?">
+            <img src={`${url_image}`} alt=""/>
           </a>
         </div>
         <div className="fh5co-desc">
